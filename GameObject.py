@@ -16,9 +16,9 @@ class GameObject:
         pg.draw.circle(self.window, pg.Color(255, 255, 255), self.position, self.radius)
 
         
-# class MovingObject(GameObject):
-#     def __init__(self, window: pg.Surface) -> None:
-#         super().__init__(window)
+class MovingObject(GameObject):
+    def __init__(self, window: pg.Surface) -> None:
+        super().__init__(window)
         
 #         self.velocity : Vec2 = Vec2(util.dir["ZERO"])
 #         self.direction : Vec2 = Vec2(util.dir["ZERO"])
