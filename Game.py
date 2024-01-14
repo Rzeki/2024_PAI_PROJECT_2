@@ -3,6 +3,7 @@ import sys
 import util
 
 from GameWorld import GameWorld
+from Graph import *
 
 
 class Game:
@@ -12,10 +13,11 @@ class Game:
         self.clock = pg.time.Clock()
         self.game_world = GameWorld(self.window)
         
-        self.start_screen = pg.image.load("assets\start.png")
-        self.end_screen = pg.image.load("assets\over.png")
+        # self.start_screen = pg.image.load("assets\start.png")
+        # self.end_screen = pg.image.load("assets\over.png")
         self.running : bool = True
         self.game_over : bool = False
+
         
     def run(self) -> None:
         while True:
@@ -62,6 +64,8 @@ class Game:
                 
         #===================DRAWING=============================        
         self.game_world.draw()
+        # self.window.fill(pg.Color(1,1,1)) # BACKGROUND
+        # pg.draw.circle(self.window, pg.Color)
         
         #===================COLLISION===========================
 
@@ -72,7 +76,7 @@ class Game:
         
         
         #===================DEBUG============================
-        # print(agent.velocity)        
+               
                 
                 
         pg.display.update()
