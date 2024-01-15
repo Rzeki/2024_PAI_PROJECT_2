@@ -17,7 +17,7 @@ class Node:
     
 
 class Edge:
-    def __init__(self, node_index_1, node_index_2, weight) -> None:
+    def __init__(self, node_index_1 : int, node_index_2 : int, weight : int = 1) -> None:
         self.from_node : int = node_index_1
         self.to_node : int = node_index_2
         self.weight = weight
@@ -47,7 +47,9 @@ class SparceGraph:
             
     def is_edge_unique(self, from_n : int, to_n : int) -> bool :
         for edge in self.edge_list_vector[from_n] :
-            if edge.to_node == to_n: return False
+            if edge.to_node == to_n: 
+                print("wrong edge")
+                return False
         return True
     
     def remove_edge(self, from_node, to_node) -> None :
