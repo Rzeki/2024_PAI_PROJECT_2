@@ -14,9 +14,10 @@ class GameWorld:
         self.projectiles : list = []
             
         self.g = SparceGraph()
-        self.generate_nodes(self.g)
-        self.world_grid : list[bool] = []
+        # self.generate_nodes(self.g)
+        self.world_grid : list[int] = []
         self.init_world_grid()
+        self.flood_fill(Vec2(1,1), self.g)
         
     def update(self, dt : float) -> None :
         pass
@@ -49,8 +50,10 @@ class GameWorld:
         i, j = 0, 0
         for line in self.world_grid:
             for cell in line:
-                if cell:
+                if cell==0:
                     pg.draw.rect(self.window, pg.Color(50, 0, 0), pg.Rect(i*util.grid, j*util.grid, util.grid, util.grid))
+                if cell==2:
+                    pg.draw.rect(self.window, pg.Color(0, 100, 0), pg.Rect(i*util.grid, j*util.grid, util.grid, util.grid))
                 i+=1
             j+=1
             i=0
@@ -73,10 +76,48 @@ class GameWorld:
     
     def init_world_grid(self) -> None :
         wdth, hgth = int(util.screen_wdth/util.grid), int(util.screen_hgth/util.grid)
-        self.world_grid.append([True for _ in range(0, wdth)])
+        self.world_grid.append([0 for _ in range(0, wdth)])
         for _ in range(0, hgth-2):
-            temp = [True]
-            temp += [False for _ in range(0, wdth-2)]
-            temp.append(True)
+            temp = [0]
+            temp += [1 for _ in range(0, wdth-2)]
+            temp.append(0)
             self.world_grid.append(temp)
-        self.world_grid.append([True for _ in range(0, wdth)])
+        self.world_grid.append([0 for _ in range(0, wdth)])
+    
+    def flood_fill(self, start : Vec2, graph : SparceGraph) -> None:
+        queue = []
+        queue.append(start)
+        
+        grid_size = Vec2(len(self.world_grid), len(self.world_grid[0]))
+        
+        
+        while queue:
+            curr_cell : Vec2 = queue.pop()
+            curr_x, curr_y = int(curr_cell.x), int(curr_cell.y)
+            
+            if self.is_cell_valid(grid_size, curr_x+1, curr_y):
+                self.world_grid[curr_x+1][curr_y] = 2
+                queue.append(Vec2(curr_x+1, curr_y))
+            if self.is_cell_valid(grid_size, curr_x-1, curr_y):
+                self.world_grid[curr_x-1][curr_y] = 2
+                queue.append(Vec2(curr_x-1, curr_y))
+                
+            if self.is_cell_valid(grid_size, curr_x, curr_y+1):
+                self.world_grid[curr_x][curr_y+1] = 2
+                queue.append(Vec2(curr_x, curr_y+1))
+            if self.is_cell_valid(grid_size, curr_x, curr_y-1):
+                self.world_grid[curr_x][curr_y-1] = 2
+                queue.append(Vec2(curr_x, curr_y-1))
+                
+            
+            
+    
+    def is_cell_valid(self, grid : Vec2, x : int, y : int) -> bool :
+        if x < 0 or x >= grid.x or\
+            y < 0 or y >= grid.y or\
+            self.world_grid[x][y] != 1 or\
+            self.world_grid[x][y] == 2:
+                return False
+        else: return True
+            
+        
